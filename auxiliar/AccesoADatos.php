@@ -96,7 +96,7 @@ class AccesoADatos {
      */
     public static function insertRolByCorreo($correo, $rol) {
         //Recupera el id del usuario asignado a ese correo
-        $idUsuario = self::getIdByorreo($correo);
+        $idUsuario = self::getIdByCorreo($correo);
 
         self::new();
         $query = 'INSERT INTO usuario_rol VALUES(' . $idUsuario . ', ' . $rol . ')';
@@ -104,7 +104,12 @@ class AccesoADatos {
         self::closeDB();
     }
 
-    public static function getIdByorreo($correo) {
+    /**
+     * Devuelve el ID asociado a una cuenta segun su correo
+     * @param type $correo
+     * @return type
+     */
+    public static function getIdByCorreo($correo) {
         $id = null;
 
         self::new();
@@ -120,6 +125,28 @@ class AccesoADatos {
         }
 
         return $id;
+    }
+
+    /**
+     * Devuelve el/los rol/es del usuario segun su correo
+     * @param type $correo
+     */
+    public static function getRolByCorreo($correo) {
+        $rol = [];
+        $idUsuario = self::getIdByCorreo($correo);
+
+        self::new();
+        $query = 'SELECT idRol FROM usuario_rol WHERE idUsuario =' . $idUsuario;
+        if ($resultado = self::$conexion->query($query)) {
+            while ($fila = $resultado->fetch_assoc()) {
+                $idRol = $fila['idRol'];
+                $rol[] = $idRol;
+            }
+
+            $resultado->free();
+        }
+        self::closeDB();
+        return $rol;
     }
 
     /**
@@ -142,60 +169,24 @@ class AccesoADatos {
 
         if ($fila = $result->fetch_assoc()) {
             $id = $fila['id'];
-            $rol = $fila['rol'];
-            $correo = $fila['correo'];
             $nombre = $fila['nombre'];
+            $correo = $fila['correo'];
             $activo = $fila['activo'];
-
             $passEncriptada = $fila['pass'];
 
             //COMPRUEBA QUE LA CONTRASEÑA SEA CORRECTA
             if (hash_equals($passEncriptada, crypt($pass, $passEncriptada))) {
-                //Contraseña correcta, carga las aulas del alumno/profesor
-                $aulas = null;
-                if ($rol == 0) {
-                    //El usuario es un alumno
-                    $consultaAulas = 'SELECT * FROM aulas WHERE id IN (SELECT idAula FROM aula_alumno WHERE idAlumno = ' . $id . ')';
-
-                    if ($resultadoAulas = self::$conexion->query($consultaAulas)) {
-                        while ($filaAula = $resultadoAulas->fetch_assoc()) {
-                            $idAula = $filaAula['id'];
-                            $idProfesor = $filaAula['idProfesor'];
-                            $nombreAula = $filaAula['nombre'];
-
-                            //Recupera el NOMBRE del profesor a cargo
-                            $consultaExtra = 'SELECT nombre FROM usuarios WHERE id=' . $idProfesor;
-                            $resultadoExtra = self::$conexion->query($consultaExtra);
-                            $nombreProfesor = null;
-                            if ($filaExtra = $resultadoExtra->fetch_assoc()) {
-                                $nombreProfesor = $filaExtra['nombre'];
-                            }
-
-                            $aula = new Aula($idAula, $nombreAula, $idProfesor, $nombreProfesor);
-                            $aulas[] = $aula;
-                        }
-                    }
-                } else {
-                    //El usuario es un profesor
-                    $consultaAulas = 'SELECT * FROM aulas WHERE idProfesor = ' . $id;
-                    $resultadoAulas = self::$conexion->query($consultaAulas);
-
-                    while ($filaAula = $resultadoAulas->fetch_assoc()) {
-                        $idAula = $filaAula['id'];
-                        $nombreAula = $filaAula['nombre'];
-
-                        $aula = new Aula($idAula, $nombreAula, $id, $nombre);
-                        $aulas[] = $aula;
-                    }
-                }
-
-                $usuario = new Usuario($id, $rol, $correo, $nombre, $activo, $aulas);
+                //Contraseña correcta, recupera el rol del usuario
+                self::closeDB();
+                $rol = self::getRolByCorreo($correo);
+                $usuario = new Usuario($id, $nombre, $correo, $rol, $activo);
+            } else {
+                self::closeDB();
             }
+            $result->free();
+            return $usuario;
         }
-        $result->free();
-
-        self::closeDB();
-
+        
         return $usuario;
     }
 

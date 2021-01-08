@@ -45,7 +45,7 @@ class Usuario {
 
     //--------------------TO STRING
     public function __toString() {
-        return '[USUARIO] ID: ' . $this->id . ' | Nombre: ' . $this->nombre . ' | Correo: ' . $this->correo . ' | Rol: ' . $this->rol . ' | Activo: ' . $this->activo;
+        return '[USUARIO] ID: ' . $this->id . ' | Nombre: ' . $this->nombre . ' | Correo: ' . $this->correo . ' | Rol: ' . $this->rol[0] . ' | Activo: ' . $this->activo;
     }
     
 }

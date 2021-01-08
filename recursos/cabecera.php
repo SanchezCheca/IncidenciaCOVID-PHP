@@ -34,11 +34,32 @@ if (isset($_SESSION['usuarioIniciado'])) {
         </ul>
         <div class = "dropdown ml-auto">
             <a class = "nav-link dropdown-toggle desplegable" href = "#" id = "navbarDropdownMenuLink" data-toggle = "dropdown" aria-haspopup = "true" aria-expanded = "false">
-                Perfil
+                <?php
+                if (isset($usuarioIniciado)) {
+                    echo '<i>' . $usuarioIniciado->getNombre() . '</i>';
+                } else {
+                    echo 'Perfil';
+                }
+                ?>
             </a>
             <div class = "dropdown-menu" aria-labelledby = "navbarDropdownMenuLink">
-                <a class = "dropdown-item" href = "#">Iniciar sesión</a>
-                <a class = "dropdown-item" href = "<?php echo $ruta . 'vistas/registro.php'; ?>">Crear cuenta</a>
+                <?php
+                if (isset($usuarioIniciado)) {
+                    //Ha iniciado sesión, se muestran otras opciones
+                    ?>
+                    <a class="dropdown-item" href="#">Mi perfil</a>
+                    <form name="cerrarSesion" action="<?php echo $ruta . 'controladores/controladorPrincipal.php'; ?>" method="POST">
+                        <input type="submit" name="cerrarSesion" class="dropdown-item" value="Cerrar sesión">
+                    </form>
+                    <?php
+                } else {
+                    //No ha iniciado sesión, se muestran la opción de inicio y registro
+                    ?>
+                    <a class = "dropdown-item" href = "<?php echo $ruta . 'vistas/login.php'; ?>">Iniciar sesión</a>
+                    <a class = "dropdown-item" href = "<?php echo $ruta . 'vistas/registro.php'; ?>">Crear cuenta</a>
+                    <?php
+                }
+                ?>
             </div>
         </div>
     </div>

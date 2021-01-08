@@ -2,7 +2,7 @@
 <html>
     <head>
         <meta charset="UTF-8">
-        <title>Crear cuenta - inCOVID</title>
+        <title>Iniciar sesión - inCOVID</title>
 
         <!-- Bootstrap -->
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css"
@@ -26,25 +26,19 @@
 
                 <!-- Título de la sección -->
                 <div class="col-12 mt-4 ml-4">
-                    <h3 class="h3">Crear tu cuenta</h3>
+                    <h3 class="h3">Inicia sesión</h3>
                 </div>
 
                 <!-- Cuerpo -->
                 <div class="col-12 mt-4 px-4 d-flex justify-content-center">
-                    <form class="w-75" name="formularioRegistro" action="../controladores/controladorPrincipal.php" method="POST">
-                        <div class="form-group">
-                            <input type="text" name="nombre" class="form-control" aria-describedby="emailHelp" placeholder="Tu nombre">
-                        </div>
+                    <form class="w-75" name="formularioInicioSesion" action="../controladores/controladorPrincipal.php" method="POST">
                         <div class="form-group">
                             <input type="email" name="correo" class="form-control" aria-describedby="emailHelp" placeholder="Correo electrónico">
                         </div>
                         <div class="form-group">
                             <input type="password" name="pass" class="form-control" placeholder="Contraseña">
                         </div>
-                        <div class="form-group">
-                            <input type="password" name="passRepetida" class="form-control" placeholder="Repite tu contraseña">
-                        </div>
-                        <input type="submit" name="registro" value="Crear cuenta" class="btn btn-primary">
+                        <input type="submit" name="inicioSesion" value="Iniciar sesión" class="btn btn-primary">
                     </form>
                 </div>
                 <div class="col-12 mt-4 d-flex justify-content-center">
