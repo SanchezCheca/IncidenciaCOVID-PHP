@@ -75,7 +75,7 @@ class AccesoADatos {
         $passEncriptada = crypt($pass);
 
         self::new();
-        $query = 'INSERT INTO usuarios VALUES(id, ' . $nombre . ', "' . $correo . '", "' . $passEncriptada . ', 0)';
+        $query = 'INSERT INTO usuarios VALUES(id, "' . $nombre . '", "' . $correo . '", "' . $passEncriptada . '", 0)';
         if (!self::$conexion->query($query)) {
             $resultado = 'Error al insertar: ' . mysqli_error(self::$conexion);
             self::closeDB();
