@@ -103,7 +103,7 @@ class AccesoADatos {
         self::$conexion->query($query);
         self::closeDB();
     }
-    
+
     /**
      * Asigna un rol a un usuario mediante su id en la tabla 'usuario_rol'
      * @param type $correo
@@ -183,7 +183,7 @@ class AccesoADatos {
         self::closeDB();
         return $rol;
     }
-    
+
     /**
      * Elimina un rol de un usuario de la tabla usuario_rol
      * @param type $idUsuario
@@ -192,19 +192,24 @@ class AccesoADatos {
     public static function removeRol($idUsuario, $idRol) {
         self::new();
         $query = 'DELETE FROM usuario_rol WHERE idUsuario=' . $idUsuario . ' AND idRol=' . $idRol;
-        self::$conexion->query($sentencia);
+        self::$conexion->query($query);
         self::closeDB();
     }
-    
+
     /**
      * Devuelve el correo electrónico de un usuario según su id
      * @param type $id
      */
-    public static function getCorreoById($id){
+    public static function getCorreoById($id) {
         self::new();
         $query = 'SELECT correo FROM usuarios WHERE id=' . $id;
-        self::$conexion->query($query);
+        if ($resultado = self::$conexion->query($query)) {
+            $fila = $resultado->fetch_assoc();
+            $correo = $fila['correo'];
+            $resultado->free();
+        }
         self::closeDB();
+        return $correo;
     }
 
     /**

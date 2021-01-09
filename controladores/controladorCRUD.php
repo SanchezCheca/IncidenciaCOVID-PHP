@@ -22,9 +22,9 @@ if (isset($_REQUEST['actualizarUsuario'])) {
         $admin = true;
     }
 
-    $activo = false;
+    $activo = 0;
     if (isset($_REQUEST['activo'])) {
-        $activo = true;
+        $activo = 1;
     }
 
     //Comprueba si es administrador
