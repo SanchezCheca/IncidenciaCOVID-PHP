@@ -71,7 +71,7 @@ if (isset($_REQUEST['actualizarInforme'])) {
         $mensaje = 'Se ha actualizado el informe.';
         
         //Actualiza el informe en la sesión
-        $_SESSION['informe'] = AccesoADatos::getInforme($id);
+        //$_SESSION['informe'] = AccesoADatos::getInforme($id);
     } else {
         $mensaje = 'Ha ocurrido algún error';
     }
