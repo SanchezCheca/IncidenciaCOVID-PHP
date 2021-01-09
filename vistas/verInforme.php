@@ -35,7 +35,7 @@
 
                     <!-- Cuerpo -->
                     <div class="col-12 mt-4 px-4 d-flex justify-content-center">
-                        <table class="table table-hover w-75" style="text-align: center">
+                        <table class="table table-hover" style="text-align: center">
                             <thead>
                                 <tr>
                                     <th scope="col">Semana</th>
@@ -59,7 +59,7 @@
                                         <td><input type="number" name="nInfectados" value="<?php echo $informe->getNInfectados(); ?>"></td>
                                         <td><input type="number" name="nFallecidos" value="<?php echo $informe->getNFallecidos(); ?>"></td>
                                         <td><input type="number" name="nAltas" value="<?php echo $informe->getNAltas(); ?>"></td>
-                                    <input type="hidden" name="id" value="<?php $informe->getId(); ?>">
+                                    <input type="hidden" name="id" value="<?php echo $informe->getId(); ?>">
                                     <td><input type="submit" name="actualizarInforme" value="Guardar" class="btn btn-success"></td>
                                 </form>
                                 <td><a href="verInforme.php"><button class="btn btn-warning">Cancelar</button></a></td>
