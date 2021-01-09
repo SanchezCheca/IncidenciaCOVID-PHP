@@ -6,7 +6,7 @@
  */
 class Usuario {
     
-    //--------------------PROPIEDADES
+    //--------------------ATRIBUTOS
     private $id;
     private $nombre;
     private $correo;

@@ -21,7 +21,7 @@
     <body>
         <div class="containter d-flex justify-content-center">
             <div class="row principal">
-                
+
                 <?php include 'recursos/cabecera.php'; ?>
 
                 <!-- Título de la sección -->
@@ -40,21 +40,25 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <th scope="row">1</th>
-                                <td>Castilla-La Mancha</td>
-                                <td><button class="btn btn-primary">Ver informe</button></td>
-                            </tr>
-                            <tr>
-                                <th scope="row">2</th>
-                                <td>Madrid</td>
-                                <td><button class="btn btn-primary">Ver informe</button></td>
-                            </tr>
-                            <tr>
-                                <th scope="row">3</th>
-                                <td>Barcelona</td>
-                                <td><button class="btn btn-primary">Ver informe</button></td>
-                            </tr>
+                            <?php
+                            require_once 'modelo/Informe.php';
+                            require_once 'auxiliar/AccesoADatos.php';
+                            $informes = AccesoADatos::getAllInformes();
+                            foreach ($informes as $informe) {
+                                ?>
+                                <tr>
+                                    <td><?php echo $informe->getSemana(); ?></td>
+                                    <td><?php echo $informe->getRegion(); ?></td>
+                                    <td>
+                                        <form name="verInforme" action="controladores/controladorInformes.php" method="POST">
+                                            <input type="hidden" name="id" value="<?php echo $informe->getId(); ?>">
+                                            <input type="submit" class="btn btn-primary" name="verInforme" value="Ver informe">
+                                        </form>
+                                    </td>
+                                </tr>
+                                <?php
+                            }
+                            ?>
                         </tbody>
                     </table>
                 </div>

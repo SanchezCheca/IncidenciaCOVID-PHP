@@ -12,6 +12,7 @@ if (substr($dir, -9) == 'index.php') {
 
 //IMPORTA LAS CLASES NECESARIAS E INICIA LA SESIÓN
 require_once $ruta . 'modelo/Usuario.php';
+require_once $ruta . 'modelo/Informe.php';
 
 session_start();
 
