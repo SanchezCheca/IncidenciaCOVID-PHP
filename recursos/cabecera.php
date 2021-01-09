@@ -48,7 +48,14 @@ if (isset($_SESSION['usuarioIniciado'])) {
                     //Ha iniciado sesión, se muestran otras opciones
                     ?>
                     <a class="dropdown-item" href="#">Mi perfil</a>
-                    <form name="cerrarSesion" action="<?php echo $ruta . 'controladores/controladorPrincipal.php'; ?>" method="POST">
+                    <form name="menu" action="<?php echo $ruta . 'controladores/controladorPrincipal.php'; ?>" method="POST">
+                        <?php
+                        if ($usuarioIniciado->isAdmin()) {
+                            ?>
+                            <input type="submit" name="administrarUsuarios" class="dropdown-item" value="Administrar usuarios">
+                            <?php
+                        }
+                        ?>
                         <input type="submit" name="cerrarSesion" class="dropdown-item" value="Cerrar sesión">
                     </form>
                     <?php

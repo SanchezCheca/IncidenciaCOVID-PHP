@@ -103,6 +103,20 @@ class AccesoADatos {
         self::$conexion->query($query);
         self::closeDB();
     }
+    
+    /**
+     * Asigna un rol a un usuario mediante su id en la tabla 'usuario_rol'
+     * @param type $correo
+     * @param type $rol
+     */
+    public static function insertRolById($id, $rol) {
+        //Recupera el id del usuario asignado a ese correo
+
+        self::new();
+        $query = 'INSERT INTO usuario_rol VALUES(' . $id . ', ' . $rol . ')';
+        self::$conexion->query($query);
+        self::closeDB();
+    }
 
     /**
      * Devuelve el ID asociado a una cuenta segun su correo
@@ -150,6 +164,50 @@ class AccesoADatos {
     }
 
     /**
+     * Devuelve el/los rol/es del usuario segun su id
+     * @param type $correo
+     */
+    public static function getRolById($id) {
+        $rol = [];
+
+        self::new();
+        $query = 'SELECT idRol FROM usuario_rol WHERE idUsuario =' . $id;
+        if ($resultado = self::$conexion->query($query)) {
+            while ($fila = $resultado->fetch_assoc()) {
+                $idRol = $fila['idRol'];
+                $rol[] = $idRol;
+            }
+
+            $resultado->free();
+        }
+        self::closeDB();
+        return $rol;
+    }
+    
+    /**
+     * Elimina un rol de un usuario de la tabla usuario_rol
+     * @param type $idUsuario
+     * @param type $idRol
+     */
+    public static function removeRol($idUsuario, $idRol) {
+        self::new();
+        $query = 'DELETE FROM usuario_rol WHERE idUsuario=' . $idUsuario . ' AND idRol=' . $idRol;
+        self::$conexion->query($sentencia);
+        self::closeDB();
+    }
+    
+    /**
+     * Devuelve el correo electrónico de un usuario según su id
+     * @param type $id
+     */
+    public static function getCorreoById($id){
+        self::new();
+        $query = 'SELECT correo FROM usuarios WHERE id=' . $id;
+        self::$conexion->query($query);
+        self::closeDB();
+    }
+
+    /**
      * Devuelve un objeto Usuario si existe y la combinación correo-pass es correcta
      * Si no, devuelve null
      * @param type $correo
@@ -186,9 +244,53 @@ class AccesoADatos {
             $result->free();
             return $usuario;
         }
-        
+
         return $usuario;
     }
+
+    /**
+     * Devuelve un vector asociativo con todos los usuarios registrados
+     */
+    public static function getAllUsers() {
+        $consulta = "SELECT * FROM usuarios";
+        $usuarios = null;
+
+        self::new();
+        if ($resultado = self::$conexion->query($consulta)) {
+            self::closeDB();
+            while ($fila = $resultado->fetch_assoc()) {
+                $id = $fila['id'];
+                $nombre = $fila['nombre'];
+                $correo = $fila['correo'];
+                $activo = $fila['activo'];
+
+                $rol = self::getRolByCorreo($correo);
+
+                $usuarios[] = new Usuario($id, $nombre, $correo, $rol, $activo);
+            }
+
+            $resultado->free();
+        }
+
+        return $usuarios;
+    }
+
+    /**
+     * Actualiza el nombre, correo y rol de un usuario cuyo id recibe
+     * @param type $id
+     * @param type $nombre
+     * @param type $correo
+     * @param type $rol
+     */
+    public static function updateUser($id, $nombre, $correo, $activo) {
+        $sentencia = "UPDATE usuarios SET correo='" . $correo . "', nombre='" . $nombre . "', activo=" . $activo . " WHERE id='" . $id . "';";
+
+        self::new();
+        self::$conexion->query($sentencia);
+        self::closeDB();
+    }
+
+    //-----------------------------------------------------------------------------------
 
     /**
      * Devuelve un usuario a partir de su id
@@ -223,45 +325,6 @@ class AccesoADatos {
         self::closeDB();
 
         return $usuario;
-    }
-
-    /**
-     * Devuelve un vector asociativo con todos los usuarios registrados
-     */
-    public static function getAllUsers() {
-        $consulta = "SELECT * FROM usuarios";
-        $usuarios = null;
-
-        self::new();
-        if ($resultado = self::$conexion->query($consulta)) {
-            while ($fila = $resultado->fetch_assoc()) {
-                $nombre = $fila['nombre'];
-                $correo = $fila['correo'];
-                $rol = $fila['rol'];
-                $id = $fila['id'];
-                $usuarios[] = new Usuario($id, $rol, $nombre, $correo, null);
-            }
-
-            $resultado->free();
-        }
-        self::closeDB();
-
-        return $usuarios;
-    }
-
-    /**
-     * Actualiza el nombre, correo y rol de un usuario cuyo id recibe
-     * @param type $id
-     * @param type $nombre
-     * @param type $correo
-     * @param type $rol
-     */
-    public static function userUpdate($id, $nombre, $correo, $rol) {
-        $sentencia = "UPDATE usuarios SET correo='" . $correo . "', nombre='" . $nombre . "', rol=" . $rol . " WHERE id='" . $id . "';";
-
-        self::new();
-        self::$conexion->query($sentencia);
-        self::closeDB();
     }
 
     /**

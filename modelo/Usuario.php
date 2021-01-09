@@ -22,6 +22,20 @@ class Usuario {
         $this->activo = $activo;
     }
     
+    //--------------------FUNCIONES
+    /**
+     * Devuelve true si el usuario contiene '1' entre sus roles
+     */
+    public function isAdmin() {
+        $resultado = false;
+        foreach($this->rol as $valor) {
+            if ($valor == 1) {
+                $resultado = true;
+            }
+        }
+        return $resultado;
+    }
+    
     //--------------------GET & SET
     function getId() {
         return $this->id;

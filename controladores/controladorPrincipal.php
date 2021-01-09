@@ -56,3 +56,23 @@ if (isset($_REQUEST['cerrarSesion'])) {
     $_SESSION['mensaje'] = 'Has cerrado la sesión.';
     header('Location: ../index.php');
 }
+
+/**
+ * Viene de 'Administrar usuarios', carga, si es administrador, una lista con todos los usuarios
+ */
+if (isset($_REQUEST['administrarUsuarios'])) {
+    if (isset($_SESSION['usuarioIniciado'])) {
+        $usuario = $_SESSION['usuarioIniciado'];
+        if ($usuario->isAdmin()) {
+            $usuarios = AccesoADatos::getAllUsers();
+            $_SESSION['usuarios'] = $usuarios;
+            header('Location: ../vistas/crud.php');
+        } else {
+            $_SESSION['mensaje'] = 'No tienes permiso para ver esta página.';
+            header('Location: ../index.php');
+        }
+    } else {
+        $_SESSION['mensaje'] = 'Ha ocurrido algún error.';
+        header('Location: ../index.php');
+    }
+}
