@@ -21,6 +21,11 @@ if (isset($_REQUEST['actualizarUsuario'])) {
     if (isset($_REQUEST['admin'])) {
         $admin = true;
     }
+    
+    $autor = false;
+    if (isset($_REQUEST['autor'])) {
+        $autor = false;
+    }
 
     $activo = 0;
     if (isset($_REQUEST['activo'])) {
@@ -36,6 +41,14 @@ if (isset($_REQUEST['actualizarUsuario'])) {
         }
     }
 
+    //Comprueba si es autor
+    $esAutor = false;
+    foreach ($rolesUsuario as $rol) {
+        if ($rol == 0) {
+            $esAutor = true;
+        }
+    }
+
     //Comprueba si se ha cambiado el correo del usuario que se está modificando y no se ha repetido en la BD
     if (AccesoADatos::getCorreoById($id) != $correo && AccesoADatos::isUser($correo)) {
         //Ha cambiado el correo de un usuario por otro que ya existe en la BD
@@ -47,6 +60,13 @@ if (isset($_REQUEST['actualizarUsuario'])) {
             AccesoADatos::removeRol($id, 1);
         } else if (!$esAdmin && $admin) {
             AccesoADatos::insertRolById($id, 1);
+        }
+        
+        //Elimina o inserta el rol '0' (autor)
+        if ($esAutor && !$autor) {
+            AccesoADatos::removeRol($id, 0);
+        } else if (!$esAutor && $autor) {
+            AccesoADatos::insertRolById($id, 0);
         }
 
         //Actualiza los datos del usuario

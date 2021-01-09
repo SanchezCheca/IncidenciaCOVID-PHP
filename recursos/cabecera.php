@@ -24,13 +24,31 @@ if (isset($_SESSION['usuarioIniciado'])) {
 <!--Cabecera-->
 <nav class = "navbar navbar-expand navbar-light bg-light w-100">
     <a class = "navbar-brand" href = "<?php echo $ruta . 'index.php'; ?>">
-        <img src = "<?php echo $ruta . 'images/logo.png'; ?>" width = "100" height = "auto" alt = "">
+        <img src = "<?php echo $ruta . 'images/logo.png'; ?>" width = "100" height = "auto" alt = "logo inCOVID">
     </a>
     <div class = "collapse navbar-collapse" id = "navbarNavDropdown">
         <ul class = "navbar-nav">
-            <li class = "nav-item active">
-                <a class = "nav-link" href = "<?php echo $ruta . 'index.php'; ?>">Inicio <span class = "sr-only">(current)</span></a>
+            <li class = "nav-item <?php
+            if (substr($dir, -9) == 'index.php') {
+                echo 'active';
+            }
+            ?>">
+                <a class = "nav-link" href = "<?php echo $ruta . 'index.php'; ?>">Todos los informes</a>
             </li>
+            <?php
+            //Muestra el enlace 'Crear informe' si el usuario iniciado es autor
+            if (isset($usuarioIniciado) && $usuarioIniciado->isAutor()) {
+                ?>
+                <li class="nav-item <?php
+                if (substr($dir, -16) == 'crearInforme.php') {
+                    echo 'active';
+                }
+                ?>">
+                    <a class="nav-link" href="<?php echo $ruta . 'vistas/crearInforme.php'; ?>">+Crear informe</a>
+                </li>
+                <?php
+            }
+            ?>
         </ul>
         <div class = "dropdown ml-auto">
             <a class = "nav-link dropdown-toggle desplegable" href = "#" id = "navbarDropdownMenuLink" data-toggle = "dropdown" aria-haspopup = "true" aria-expanded = "false">

@@ -36,6 +36,19 @@ class Usuario {
         return $resultado;
     }
     
+    /**
+     * Devuelve true si el usuario contiene '0' entre sus roles
+     */
+    public function isAutor() {
+        $resultado = false;
+        foreach($this->rol as $valor) {
+            if ($valor == 0) {
+                $resultado = true;
+            }
+        }
+        return $resultado;
+    }
+    
     //--------------------GET & SET
     function getId() {
         return $this->id;

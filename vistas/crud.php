@@ -38,6 +38,7 @@
                                 <th scope="col">Nombre</th>
                                 <th scope="col">Correo</th>
                                 <th scope="col">¿Admin?</th>
+                                <th scope="col">¿Autor?</th>
                                 <th scope="col">Activo</th>
                                 <th colspan="2">Acciones</th>
                             </tr>
@@ -59,7 +60,12 @@
                                             echo 'checked';
                                         };
                                         ?>></td>
-                                    <td><input type="checkbox" name="activo" <?php
+                                    <td><input type="checkbox" name="autor" value="1" <?php
+                                        if ($usuario->isAutor()) {
+                                            echo 'checked';
+                                        };
+                                        ?>></td>
+                                    <td><input type="checkbox" name="activo" value="1" <?php
                                         if ($usuario->getActivo() == 1) {
                                             echo 'checked';
                                         }
