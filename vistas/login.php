@@ -42,7 +42,7 @@
                     </form>
                 </div>
                 <div class="col-12 mt-4 d-flex justify-content-center">
-                    <p>¿Ya tienes cuenta? <a href="login.php">Inicia sesión</a></p>
+                    <p>¿No tienes cuenta? <a href="registro.php">Regístrate</a></p>
                 </div>
             </div>
 
