@@ -30,6 +30,21 @@
                 $regiones = AccesoADatos::getAllRegiones();
                 $semanas = AccesoADatos::getAllSemanas();
 
+                if (isset($_REQUEST['filtrar'])) {
+                    $filtroRegion = $_REQUEST['filtroRegion'];
+                    $filtroSemana = $_REQUEST['filtroSemana'];
+
+                    $informesFiltrados = null;
+
+                    foreach ($informes as $informe) {
+                        if (($informe->getSemana() == $filtroSemana || $filtroSemana == 'TODAS') && ($informe->getRegion() == $filtroRegion || $filtroRegion == 'TODAS')) {
+                            $informesFiltrados[] = $informe;
+                        }
+                    }
+                    
+                    $informes = $informesFiltrados;
+                }
+
                 //Calcula los datos totales
                 $infectados = 0;
                 $fallecidos = 0;
@@ -42,39 +57,51 @@
                 ?>
 
                 <!-- Filtro -->
-                <div class="col-2 mt-4">
+                <div class="col-2 mt-4 ml-4">
                     <h5 class="h5">Filtrar por:</h5>
                 </div>
                 <div class="col-8 mt-4">
-                    <form name="filtro" action="controladores/controladorPrincipal.php" method="POST">
+                    <form name="filtro" action="index.php" method="POST">
                         <div class="form-group">
-                            <label for="region">Región: </label>
-                            <select class="form-control" name="region">
+                            <label for="filtroRegion">Región: </label>
+                            <select class="form-control" name="filtroRegion">
                                 <option value="TODAS">TODAS</option>
                                 <?php
                                 foreach ($regiones as $region) {
                                     ?>
-                                    <option value="<?php echo $region->getNombre(); ?>"><?php echo $region->getNombre(); ?></option>
-                                    <?php
-                                }
-                                ?>
+                                    <option value="<?php
+                                    echo $region->getNombre();
+                                    ?>"<?php
+                                            if (isset($filtroRegion) && $filtroRegion == $region->getNombre()) {
+                                                echo 'selected';
+                                            }
+                                            ?>><?php echo $region->getNombre(); ?></option>
+                                            <?php
+                                        }
+                                        ?>
                             </select>
-                            <label for="semana">Semana: </label>
-                            <select class="form-control" name="semana">
+                            <label for="filtroSemana">Semana: </label>
+                            <select class="form-control" name="filtroSemana">
                                 <option value="TODAS">TODAS</option>
                                 <?php
                                 foreach ($semanas as $semana) {
                                     ?>
-                                    <option value="<?php echo $semana; ?>"><?php echo $semana; ?></option>
-                                    <?php
-                                }
-                                ?>
+                                    <option value="<?php
+                                    echo $semana;
+                                    ?>"<?php
+                                            if (isset($filtroSemana) && $filtroSemana == $semana) {
+                                                echo 'selected';
+                                            }
+                                            ?>><?php echo $semana; ?></option>
+                                            <?php
+                                        }
+                                        ?>
                             </select>
                         </div>
 
 
                 </div>
-                <div class="col-2 mt-5">
+                <div class="col-1 mt-5">
                     <input class="btn btn-dark" type="submit" name="filtrar" value="Aplicar">
                     </form>
                 </div>
@@ -140,7 +167,7 @@
                         </tbody>
                     </table>
                 </div>
-                
+
                 <?php include 'recursos/footer.php'; ?>
             </div>
 
