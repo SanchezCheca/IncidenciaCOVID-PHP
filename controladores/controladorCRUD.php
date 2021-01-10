@@ -101,3 +101,10 @@ if (isset($_REQUEST['actualizarRegion'])) {
     $_SESSION['mensaje'] = 'Se ha actualizado la región "' . $nombre . '"';
     header('Location: ../controladores/controladorPrincipal.php?administrarRegiones=1');
 }
+
+if (isset($_REQUEST['crearRegion'])) {
+    $nombre = $_REQUEST['nombre'];
+    AccesoADatos::setRegion($nombre);
+    $_SESSION['mensaje'] = 'Se ha creado la región "' . $nombre . '".';
+    header('Location: ../controladores/controladorPrincipal.php?administrarRegiones=1');
+}

@@ -29,10 +29,25 @@
                     header('Location: ../index.php');
                 }
                 ?>
+                
+                <!-- Título de la sección -->
+                <div class="col-12 mt-4 ml-4">
+                    <h4 class="h4">Crear región</h4>
+                </div>
+                
+                <div class="col-12 mt-4 px-4 d-flex justify-content-center">
+                    <form name="administracionRegion" action="../controladores/controladorCRUD.php" method="POST">
+                        <div class="form-inline w-100">
+                            <input type="text" name="nombre" placeholder="Nombre de la región" class="form-control">
+                            <input type="submit" name="crearRegion" value="Crear región" class="btn btn-success">
+                        </div>
+                        
+                    </form>
+                </div>
 
                 <!-- Título de la sección -->
                 <div class="col-12 mt-4 ml-4">
-                    <h4 class="h4">Panel de administrador: Regiones</h4>
+                    <h4 class="h4">Todas las regiones</h4>
                 </div>
 
                 <!-- Cuerpo -->

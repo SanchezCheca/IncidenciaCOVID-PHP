@@ -107,7 +107,7 @@
                                         <td><?php echo $informe->getNInfectados(); ?></td>
                                         <td><?php echo $informe->getNFallecidos(); ?></td>
                                         <td><?php echo $informe->getNAltas(); ?></td>
-                                        <td><a href="verPerfil.php?id=<?php echo $informe->getIdAutor(); ?>"><?php echo $nombreAutor; ?></a></td>
+                                        <td><?php echo $nombreAutor; ?></td>
                                     </tr>
                                     <?php
                                 } else {

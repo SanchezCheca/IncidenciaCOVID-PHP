@@ -27,7 +27,7 @@
                 require_once 'modelo/Informe.php';
                 require_once 'auxiliar/AccesoADatos.php';
                 $informes = AccesoADatos::getAllInformes();
-                $regiones = AccesoADatos::getAllRegiones();
+                $regiones = AccesoADatos::getAllUniqueRegiones();
                 $semanas = AccesoADatos::getAllSemanas();
 
                 if (isset($_REQUEST['filtrar'])) {
@@ -41,7 +41,7 @@
                             $informesFiltrados[] = $informe;
                         }
                     }
-                    
+
                     $informes = $informesFiltrados;
                 }
 
@@ -49,10 +49,19 @@
                 $infectados = 0;
                 $fallecidos = 0;
                 $altas = 0;
-                foreach ($informes as $informe) {
-                    $infectados += $informe->getNInfectados();
-                    $fallecidos += $informe->getNFallecidos();
-                    $altas += $informe->getNAltas();
+
+                if (is_array($informes)) {
+                    for ($i = 0; $i < sizeof($informes); $i++) {
+                        $infectados += $informes[$i]->getNInfectados();
+                        $fallecidos += $informes[$i]->getNFallecidos();
+                        $altas += $informes[$i]->getNAltas();
+                    }
+                } else {
+                    ?>
+                <div class="col-12 d-flex justify-content-center">
+                    <p class="text-danger mt-4">No hay informes que coincidan con tu búsqueda.</p>
+                </div>
+                    <?php
                 }
                 ?>
 
@@ -149,19 +158,21 @@
                         </thead>
                         <tbody>
                             <?php
-                            foreach ($informes as $informe) {
-                                ?>
-                                <tr>
-                                    <td><?php echo $informe->getSemana(); ?></td>
-                                    <td><?php echo $informe->getRegion(); ?></td>
-                                    <td>
-                                        <form name="verInforme" action="controladores/controladorInformes.php" method="POST">
-                                            <input type="hidden" name="id" value="<?php echo $informe->getId(); ?>">
-                                            <input type="submit" class="btn btn-primary" name="verInforme" value="Ver informe">
-                                        </form>
-                                    </td>
-                                </tr>
-                                <?php
+                            if (is_array($informes)) {
+                                for ($i = 0; $i < sizeof($informes); $i++) {
+                                    ?>
+                                    <tr>
+                                        <td><?php echo $informes[$i]->getSemana(); ?></td>
+                                        <td><?php echo $informes[$i]->getRegion(); ?></td>
+                                        <td>
+                                            <form name="verInforme" action="controladores/controladorInformes.php" method="POST">
+                                                <input type="hidden" name="id" value="<?php echo $informes[$i]->getId(); ?>">
+                                                <input type="submit" class="btn btn-primary" name="verInforme" value="Ver informe">
+                                            </form>
+                                        </td>
+                                    </tr>
+                                    <?php
+                                }
                             }
                             ?>
                         </tbody>

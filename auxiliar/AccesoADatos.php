@@ -456,7 +456,7 @@ class AccesoADatos {
      * @param type $nombre
      */
     public static function setRegion($nombre) {
-        $query = 'INERT INTO regiones VALUES(id,"' . $nombre . '")';
+        $query = 'INSERT INTO regiones VALUES(id,"' . $nombre . '")';
         self::new();
         self::$conexion->query($query);
         self::closeDB();
@@ -479,6 +479,28 @@ class AccesoADatos {
      */
     public static function getAllRegiones() {
         $consulta = "SELECT * FROM regiones";
+        $regiones = null;
+
+        self::new();
+        if ($resultado = self::$conexion->query($consulta)) {
+            self::closeDB();
+            while ($fila = $resultado->fetch_assoc()) {
+                $id = $fila['id'];
+                $nombre = $fila['nombre'];
+
+                $regiones[] = new Region($id, $nombre);
+            }
+            $resultado->free();
+        }
+
+        return $regiones;
+    }
+
+    /**
+     * Devuelve todas las regiones que estén siendo utilizadas por algún informe
+     */
+    public static function getAllUniqueRegiones() {
+        $consulta = 'SELECT * FROM regiones WHERE id IN (SELECT DISTINCT region FROM informes)';
         $regiones = null;
 
         self::new();
@@ -522,4 +544,5 @@ class AccesoADatos {
         self::$conexion->query($query);
         self::closeDB();
     }
+
 }
