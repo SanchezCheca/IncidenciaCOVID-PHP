@@ -76,3 +76,23 @@ if (isset($_REQUEST['administrarUsuarios'])) {
         header('Location: ../index.php');
     }
 }
+
+/**
+ * Viene de 'Administrar regiones', las carga y manda a la vista
+ */
+if (isset($_REQUEST['administrarRegiones'])) {
+    if (isset($_SESSION['usuarioIniciado'])) {
+        $usuario = $_SESSION['usuarioIniciado'];
+        if ($usuario->isAdmin()) {
+            $regiones = AccesoADatos::getAllRegiones();
+            $_SESSION['regiones'] = $regiones;
+            header('Location: ../vistas/regiones.php');
+        } else {
+            $_SESSION['mensaje'] = 'No tienes permiso para ver esta página.';
+            header('Location: ../index.php');
+        }
+    } else {
+        $_SESSION['mensaje'] = 'Ha ocurrido algún error.';
+        header('Location: ../index.php');
+    }
+}

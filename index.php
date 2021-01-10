@@ -20,13 +20,15 @@
     </head>
     <body>
         <div class="containter d-flex justify-content-center">
-            <div class="row principal">
+            <div class="row principal rounded">
 
                 <?php
                 include 'recursos/cabecera.php';
                 require_once 'modelo/Informe.php';
                 require_once 'auxiliar/AccesoADatos.php';
                 $informes = AccesoADatos::getAllInformes();
+                $regiones = AccesoADatos::getAllRegiones();
+                $semanas = AccesoADatos::getAllSemanas();
 
                 //Calcula los datos totales
                 $infectados = 0;
@@ -40,27 +42,44 @@
                 ?>
 
                 <!-- Filtro -->
-                <div class="col-12 mt-4">
+                <div class="col-2 mt-4">
                     <h5 class="h5">Filtrar por:</h5>
-
+                </div>
+                <div class="col-8 mt-4">
                     <form name="filtro" action="controladores/controladorPrincipal.php" method="POST">
                         <div class="form-group">
                             <label for="region">Región: </label>
                             <select class="form-control" name="region">
-                                <option value="aa">SASAD</option>
-                                <option value="aa">SAawdwSAD</option>
-                                <option value="aa">SAadswzxSAD</option>
+                                <option value="TODAS">TODAS</option>
+                                <?php
+                                foreach ($regiones as $region) {
+                                    ?>
+                                    <option value="<?php echo $region->getNombre(); ?>"><?php echo $region->getNombre(); ?></option>
+                                    <?php
+                                }
+                                ?>
                             </select>
                             <label for="semana">Semana: </label>
                             <select class="form-control" name="semana">
-                                <option value="aa">SASAD</option>
-                                <option value="aa">SAawdwSAD</option>
-                                <option value="aa">SAadswzxSAD</option>
+                                <option value="TODAS">TODAS</option>
+                                <?php
+                                foreach ($semanas as $semana) {
+                                    ?>
+                                    <option value="<?php echo $semana; ?>"><?php echo $semana; ?></option>
+                                    <?php
+                                }
+                                ?>
                             </select>
                         </div>
 
+
+                </div>
+                <div class="col-2 mt-5">
+                    <input class="btn btn-dark" type="submit" name="filtrar" value="Aplicar">
                     </form>
                 </div>
+
+
 
                 <!-- Primera seccion -->
                 <div class="col-12 mt-4 ml-4">
@@ -121,6 +140,8 @@
                         </tbody>
                     </table>
                 </div>
+                
+                <?php include 'recursos/footer.php'; ?>
             </div>
 
         </div>

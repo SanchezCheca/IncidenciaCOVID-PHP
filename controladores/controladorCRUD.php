@@ -22,7 +22,7 @@ if (isset($_REQUEST['actualizarUsuario'])) {
     if (isset($_REQUEST['admin'])) {
         $admin = true;
     }
-    
+
     $autor = false;
     if (isset($_REQUEST['autor'])) {
         $autor = false;
@@ -62,7 +62,7 @@ if (isset($_REQUEST['actualizarUsuario'])) {
         } else if (!$esAdmin && $admin) {
             AccesoADatos::insertRolById($id, 1);
         }
-        
+
         //Elimina o inserta el rol '0' (autor)
         if ($esAutor && !$autor) {
             AccesoADatos::removeRol($id, 0);
@@ -78,4 +78,26 @@ if (isset($_REQUEST['actualizarUsuario'])) {
         //Manda al controlador principal con el dato 'administrarUsuarios' por GET para que actualice la lista de usuarios del CRUD
         header('Location: ../controladores/controladorPrincipal.php?administrarUsuarios=1');
     }
+}
+
+if (isset($_REQUEST['eliminarUsuario'])) {
+    $id = $_REQUEST['id'];
+    AccesoADatos::deleteUser($id);
+    $_SESSION['mensaje'] = 'Se ha eliminado al usuario';
+    header('Location: ../vistas/crud.php');
+}
+
+if (isset($_REQUEST['eliminarRegion'])) {
+    $id = $_REQUEST['id'];
+    AccesoADatos::deleteRegion($id);
+    $_SESSION['mensaje'] = 'Se ha eliminado la region';
+    header('Location: ../vistas/regiones.php');
+}
+
+if (isset($_REQUEST['actualizarRegion'])) {
+    $id = $_REQUEST['id'];
+    $nombre = $_REQUEST['nombre'];
+    AccesoADatos::updateRegion($id, $nombre);
+    $_SESSION['mensaje'] = 'Se ha actualizado la región "' . $nombre . '"';
+    header('Location: ../controladores/controladorPrincipal.php?administrarRegiones=1');
 }
