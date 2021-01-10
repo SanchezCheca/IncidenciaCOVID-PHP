@@ -22,11 +22,73 @@
         <div class="containter d-flex justify-content-center">
             <div class="row principal">
 
-                <?php include 'recursos/cabecera.php'; ?>
+                <?php
+                include 'recursos/cabecera.php';
+                require_once 'modelo/Informe.php';
+                require_once 'auxiliar/AccesoADatos.php';
+                $informes = AccesoADatos::getAllInformes();
+
+                //Calcula los datos totales
+                $infectados = 0;
+                $fallecidos = 0;
+                $altas = 0;
+                foreach ($informes as $informe) {
+                    $infectados += $informe->getNInfectados();
+                    $fallecidos += $informe->getNFallecidos();
+                    $altas += $informe->getNAltas();
+                }
+                ?>
+
+                <!-- Filtro -->
+                <div class="col-12 mt-4">
+                    <h5 class="h5">Filtrar por:</h5>
+
+                    <form name="filtro" action="controladores/controladorPrincipal.php" method="POST">
+                        <div class="form-group">
+                            <label for="region">Región: </label>
+                            <select class="form-control" name="region">
+                                <option value="aa">SASAD</option>
+                                <option value="aa">SAawdwSAD</option>
+                                <option value="aa">SAadswzxSAD</option>
+                            </select>
+                            <label for="semana">Semana: </label>
+                            <select class="form-control" name="semana">
+                                <option value="aa">SASAD</option>
+                                <option value="aa">SAawdwSAD</option>
+                                <option value="aa">SAadswzxSAD</option>
+                            </select>
+                        </div>
+
+                    </form>
+                </div>
+
+                <!-- Primera seccion -->
+                <div class="col-12 mt-4 ml-4">
+                    <h4 class="h4">Datos totales</h4>
+                </div>
+
+                <div class="col-12 mt-4 px-4 d-flex justify-content-center">
+                    <table class="table table-hover w-75">
+                        <thead>
+                            <tr>
+                                <th scope="col">Infectados</th>
+                                <th scope="col">Fallecidos</th>
+                                <th scope="col">Altas</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><?php echo $infectados; ?></td>
+                                <td><?php echo $fallecidos; ?></td>
+                                <td><?php echo $altas; ?></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
 
                 <!-- Título de la sección -->
                 <div class="col-12 mt-4 ml-4">
-                    <h3 class="h3">Últimos informes de incidencia</h3>
+                    <h4 class="h4">Todos los informes</h4>
                 </div>
 
                 <!-- Cuerpo -->
@@ -41,9 +103,6 @@
                         </thead>
                         <tbody>
                             <?php
-                            require_once 'modelo/Informe.php';
-                            require_once 'auxiliar/AccesoADatos.php';
-                            $informes = AccesoADatos::getAllInformes();
                             foreach ($informes as $informe) {
                                 ?>
                                 <tr>

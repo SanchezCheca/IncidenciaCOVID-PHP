@@ -34,7 +34,7 @@ if (isset($_SESSION['usuarioIniciado'])) {
                 echo 'active';
             }
             ?>">
-                <a class = "nav-link" href = "<?php echo $ruta . 'index.php'; ?>">Todos los informes</a>
+                <a class = "nav-link" href = "<?php echo $ruta . 'index.php'; ?>">Informes de incidencia</a>
             </li>
             <?php
             //Muestra el enlace 'Crear informe' si el usuario iniciado es autor

@@ -22,7 +22,15 @@
         <div class="container-fluid d-flex justify-content-center">
             <div class="row principal">
 
-                <?php include '../recursos/cabecera.php'; ?>
+                <?php 
+                include '../recursos/cabecera.php'; 
+                
+                //Comprueba que el usuario es autor
+                if (!(isset($usuarioIniciado) && $usuarioIniciado->isAutor())) {
+                    $_SESSION['mensaje'] = 'No tienes permiso para ver esa página.';
+                    header('Location: ../index.php');
+                }
+                ?>
 
                 <!-- Título de la sección -->
                 <div class="col-12 mt-4 ml-4">
