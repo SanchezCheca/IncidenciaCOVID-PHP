@@ -18,6 +18,7 @@ if (substr($dir, -9) == 'index.php') {
 }
 
 require_once $ruta . 'modelo/Usuario.php';
+require_once $ruta . 'modelo/Informe.php';
 require_once $ruta . 'auxiliar/Variables.php';
 
 class AccesoADatos {
@@ -110,8 +111,6 @@ class AccesoADatos {
      * @param type $rol
      */
     public static function insertRolById($id, $rol) {
-        //Recupera el id del usuario asignado a ese correo
-
         self::new();
         $query = 'INSERT INTO usuario_rol VALUES(' . $id . ', ' . $rol . ')';
         self::$conexion->query($query);
@@ -289,6 +288,131 @@ class AccesoADatos {
      */
     public static function updateUser($id, $nombre, $correo, $activo) {
         $sentencia = "UPDATE usuarios SET correo='" . $correo . "', nombre='" . $nombre . "', activo=" . $activo . " WHERE id='" . $id . "';";
+
+        self::new();
+        self::$conexion->query($sentencia);
+        self::closeDB();
+    }
+
+    /**
+     * Devuelve true si existe algún informe para esa semana y región
+     * @param type $semana
+     * @param type $region
+     * @return boolean
+     */
+    public static function isInforme($semana, $region) {
+        $existe = false;
+
+        self::new();
+        $consulta = 'SELECT * FROM informes WHERE semana="' . $semana . '" AND region="' . $region . '"';
+
+        $resultado = self::$conexion->query($consulta);
+        if ($fila = $resultado->fetch_assoc()) {
+            $existe = true;
+        }
+        self::closeDB();
+
+        return $existe;
+    }
+
+    /**
+     * Introduce un nuevo informe en la BD
+     * @param type $semana
+     * @param type $region
+     * @param type $nInfectados
+     * @param type $nFallecidos
+     * @param type $nAltas
+     * @param type $idAutor
+     */
+    public static function insertInforme($semana, $region, $nInfectados, $nFallecidos, $nAltas, $idAutor) {
+        self::new();
+        $query = 'INSERT INTO informes VALUES(id,"' . $semana . '","' . $region . '",' . $nInfectados . ',' . $nFallecidos . ',' . $nAltas . ',' . $idAutor . ')';
+        self::$conexion->query($query);
+        self::closeDB();
+    }
+
+    /**
+     * Devuelve un informe segun su id
+     * @param type $id
+     */
+    public static function getInforme($id) {
+        $informe = null;
+        self::new();
+        $query = 'SELECT * FROM informes WHERE id=' . $id;
+        if ($resultado = self::$conexion->query($query)) {
+            $fila = $resultado->fetch_assoc();
+
+            $idInforme = $fila['id'];
+            $semana = $fila['semana'];
+            $region = $fila['region'];
+            $nInfectados = $fila['nInfectados'];
+            $nFallecidos = $fila['nFallecidos'];
+            $nAltas = $fila['nAltas'];
+            $idAutor = $fila['idautor'];
+
+            $informe = new Informe($idInforme, $semana, $region, $nInfectados, $nFallecidos, $nAltas, $idAutor);
+
+            $resultado->free();
+        }
+        self::closeDB();
+        return $informe;
+    }
+
+    /**
+     * Devuelve todos los informes de la BD
+     */
+    public static function getAllInformes() {
+        $consulta = "SELECT * FROM informes ORDER BY semana";
+        $informes = null;
+
+        self::new();
+        if ($resultado = self::$conexion->query($consulta)) {
+            self::closeDB();
+            while ($fila = $resultado->fetch_assoc()) {
+                $id = $fila['id'];
+                $semana = $fila['semana'];
+                $region = $fila['region'];
+                $nInfectados = $fila['nInfectados'];
+                $nFallecidos = $fila['nFallecidos'];
+                $nAltas = $fila['nAltas'];
+                $idAutor = $fila['idautor'];
+
+                $informes[] = new Informe($id, $semana, $region, $nInfectados, $nFallecidos, $nAltas, $idAutor);
+            }
+
+            $resultado->free();
+        }
+
+        return $informes;
+    }
+
+    /**
+     * Devuelve el NOMBRE de usuario por su id
+     * @param type $id
+     */
+    public static function getNameById($id) {
+        $nombre = null;
+
+        self::new();
+        $query = 'SELECT nombre FROM usuarios WHERE id=' . $id;
+        $resultado = self::$conexion->query($query);
+        if ($fila = $resultado->fetch_assoc()) {
+            $nombre = $fila['nombre'];
+        }
+        self::closeDB();
+
+        return $nombre;
+    }
+
+    /**
+     * Actualiza un informe
+     * @param type $id
+     * @param type $nombre
+     * @param type $correo
+     * @param type $activo
+     */
+    public static function updateInforme($id, $nInfectados, $nFallecidos, $nAltas, $idAutor) {
+        $sentencia = 'UPDATE informes SET nInfectados=' . $nInfectados . ', nFallecidos=' . $nFallecidos . ', nAltas=' . $nAltas . ', idautor=' . $idAutor . ' WHERE id=' . $id;
 
         self::new();
         self::$conexion->query($sentencia);

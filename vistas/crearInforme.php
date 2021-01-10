@@ -22,27 +22,66 @@
         <div class="container-fluid d-flex justify-content-center">
             <div class="row principal">
 
-                <?php include '../recursos/cabecera.php'; ?>
+                <?php 
+                include '../recursos/cabecera.php'; 
+                
+                //Comprueba que el usuario es autor
+                if (!(isset($usuarioIniciado) && $usuarioIniciado->isAutor())) {
+                    $_SESSION['mensaje'] = 'No tienes permiso para ver esa página.';
+                    header('Location: ../index.php');
+                }
+                ?>
 
                 <!-- Título de la sección -->
                 <div class="col-12 mt-4 ml-4">
-                    <h3 class="h3">Crear informe</h3>
+                    <h3 class="h3">Nuevo informe</h3>
                 </div>
 
                 <!-- Cuerpo -->
                 <div class="col-12 mt-4 px-4 d-flex justify-content-center">
-                    <form class="w-75" name="formularioInicioSesion" action="../controladores/controladorPrincipal.php" method="POST">
+                    <form class="w-75" name="formularioNuevoInforme" action="../controladores/controladorInformes.php" method="POST">
                         <div class="form-group">
-                            <input type="email" name="correo" class="form-control" aria-describedby="emailHelp" placeholder="Correo electrónico">
+                            <label for="semana">Semana</label>
+                            <select class="form-control" name="semana">
+                                <?php
+                                //Da la opción de crear un informe en cualquiera de las últimas 15 semanas
+                                for ($i = 0; $i < 15; $i++) {
+                                    $i2 = $i + 1;
+                                    $semana = date("M j", strtotime("this monday - $i2 week")) . ' - ' . date("M j", strtotime("this sunday - $i week"));
+                                    echo '<option value="' . $semana . '">' . $semana . '</option>';
+                                }
+                                ?>
+                            </select>
                         </div>
                         <div class="form-group">
-                            <input type="password" name="pass" class="form-control" placeholder="Contraseña">
+                            <label for="region">Región</label>
+                            <select class="form-control" name="region">
+                                <?php
+                                //Recupera todas las regiones del archivo auxiliar Regiones.php
+                                require_once '../auxiliar/Regiones.php';
+                                foreach (Regiones::$REGIONES as $region) {
+                                    echo '<option value="' . $region . '">' . $region . '</option>';
+                                }
+                                ?>
+                            </select>
                         </div>
-                        <input type="submit" name="inicioSesion" value="Iniciar sesión" class="btn btn-primary">
+                        <div class="form-group">
+                            <label for="nInfectados">Nº de infectados</label>
+                            <input class="form-control" name="nInfectados" type="number" required="">
+                        </div>
+                        <div class="form-group">
+                            <label for="nFallecidos">Nº de fallecidos</label>
+                            <input class="form-control" name="nFallecidos" type="number" required="">
+                        </div>
+                        <div class="form-group">
+                            <label for="nAltas">Nº de altas</label>
+                            <input class="form-control" name="nAltas" type="number" required="">
+                        </div>
+                        <input type="submit" name="crearInforme" value="Crear informe" class="btn btn-primary w-100">
                     </form>
                 </div>
-                <div class="col-12 mt-4 d-flex justify-content-center">
-                    <p>¿No tienes cuenta? <a href="registro.php">Regístrate</a></p>
+                <div class="col-12 d-flex justify-content-center mt-3">
+                    <p><a href="../index.php">Volver</a></p>
                 </div>
             </div>
 

@@ -12,6 +12,7 @@ if (substr($dir, -9) == 'index.php') {
 
 //IMPORTA LAS CLASES NECESARIAS E INICIA LA SESIÓN
 require_once $ruta . 'modelo/Usuario.php';
+require_once $ruta . 'modelo/Informe.php';
 
 session_start();
 
@@ -33,7 +34,7 @@ if (isset($_SESSION['usuarioIniciado'])) {
                 echo 'active';
             }
             ?>">
-                <a class = "nav-link" href = "<?php echo $ruta . 'index.php'; ?>">Todos los informes</a>
+                <a class = "nav-link" href = "<?php echo $ruta . 'index.php'; ?>">Informes de incidencia</a>
             </li>
             <?php
             //Muestra el enlace 'Crear informe' si el usuario iniciado es autor

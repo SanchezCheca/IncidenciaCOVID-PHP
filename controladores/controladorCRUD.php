@@ -8,6 +8,7 @@ session_start();
 /**
  * Controlador se encarga de las funcionalidades relacionadas con el Administrador
  * crud.php
+ * regiones.php
  */
 /**
  * Actualiza en BD los datos que vienen del crud
