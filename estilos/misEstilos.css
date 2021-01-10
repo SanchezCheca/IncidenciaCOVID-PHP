@@ -1,0 +1,39 @@
+/* 
+    Author     : daniel
+*/
+body
+{
+    background-color: #3e5c35;
+}
+
+.principal
+{
+    background-color: #dff2d5;
+}
+
+@media (max-width: 767.98px) {
+    .principal
+    {
+        width: 100%;
+        margin-top: 0;
+    }
+}
+
+@media (min-width: 767.98px) {
+    .principal
+    {
+        width: 60%;
+        margin-top: 5vh;
+    }
+}
+
+/* Elementos dentro de la barra de navegación */
+.desplegable
+{
+    color: grey;
+}
+
+.desplegable:hover
+{
+    color: black;
+}
