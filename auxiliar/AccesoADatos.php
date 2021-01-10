@@ -19,6 +19,7 @@ if (substr($dir, -9) == 'index.php') {
 
 require_once $ruta . 'modelo/Usuario.php';
 require_once $ruta . 'modelo/Informe.php';
+require_once $ruta . 'modelo/Region.php';
 require_once $ruta . 'auxiliar/Variables.php';
 
 class AccesoADatos {
@@ -340,15 +341,23 @@ class AccesoADatos {
         self::new();
         $query = 'SELECT * FROM informes WHERE id=' . $id;
         if ($resultado = self::$conexion->query($query)) {
+            self::closeDB();
             $fila = $resultado->fetch_assoc();
 
             $idInforme = $fila['id'];
             $semana = $fila['semana'];
-            $region = $fila['region'];
             $nInfectados = $fila['nInfectados'];
             $nFallecidos = $fila['nFallecidos'];
             $nAltas = $fila['nAltas'];
             $idAutor = $fila['idautor'];
+
+            //Recupera el NOMBRE de la region
+            self::new();
+            $region = $fila['region'];
+            $consultaRegion = 'SELECT nombre FROM regiones WHERE id=' . $region;
+            $resultado = self::$conexion->query($consultaRegion);
+            $fila = $resultado->fetch_assoc();
+            $region = $fila['nombre'];
 
             $informe = new Informe($idInforme, $semana, $region, $nInfectados, $nFallecidos, $nAltas, $idAutor);
 
@@ -362,7 +371,7 @@ class AccesoADatos {
      * Devuelve todos los informes de la BD
      */
     public static function getAllInformes() {
-        $consulta = "SELECT * FROM informes ORDER BY semana";
+        $consulta = "SELECT * FROM informes";
         $informes = null;
 
         self::new();
@@ -371,15 +380,22 @@ class AccesoADatos {
             while ($fila = $resultado->fetch_assoc()) {
                 $id = $fila['id'];
                 $semana = $fila['semana'];
-                $region = $fila['region'];
                 $nInfectados = $fila['nInfectados'];
                 $nFallecidos = $fila['nFallecidos'];
                 $nAltas = $fila['nAltas'];
                 $idAutor = $fila['idautor'];
 
+                //Recupera el NOMBRE de la region
+                self::new();
+                $region = $fila['region'];
+                $consultaRegion = 'SELECT nombre FROM regiones WHERE id=' . $region;
+                $resultadoRegion = self::$conexion->query($consultaRegion);
+                $fila = $resultadoRegion->fetch_assoc();
+                $region = $fila['nombre'];
+                self::closeDB();
+
                 $informes[] = new Informe($id, $semana, $region, $nInfectados, $nFallecidos, $nAltas, $idAutor);
             }
-
             $resultado->free();
         }
 
@@ -416,6 +432,94 @@ class AccesoADatos {
 
         self::new();
         self::$conexion->query($sentencia);
+        self::closeDB();
+    }
+
+    /**
+     * Devuelve un vector con todas las semanas
+     */
+    public static function getAllSemanas() {
+        $semanas = null;
+        $query = 'SELECT DISTINCT semana FROM informes';
+        self::new();
+        if ($resultado = self::$conexion->query($query)) {
+            while ($fila = $resultado->fetch_assoc()) {
+                $semanas[] = $fila['semana'];
+            }
+        }
+        self::closeDB();
+        return $semanas;
+    }
+
+    /**
+     * Guarda una nueva region
+     * @param type $nombre
+     */
+    public static function setRegion($nombre) {
+        $query = 'INERT INTO regiones VALUES(id,"' . $nombre . '")';
+        self::new();
+        self::$conexion->query($query);
+        self::closeDB();
+    }
+
+    /**
+     * Actualiza region
+     * @param type $id
+     * @param type $nombre
+     */
+    public static function updateRegion($id, $nombre) {
+        $query = 'UPDATE regiones SET nombre="' . $nombre . '" WHERE id=' . $id;
+        self::new();
+        self::$conexion->query($query);
+        self::closeDB();
+    }
+
+    /**
+     * Devuelve todas las regiones
+     */
+    public static function getAllRegiones() {
+        $consulta = "SELECT * FROM regiones";
+        $regiones = null;
+
+        self::new();
+        if ($resultado = self::$conexion->query($consulta)) {
+            self::closeDB();
+            while ($fila = $resultado->fetch_assoc()) {
+                $id = $fila['id'];
+                $nombre = $fila['nombre'];
+
+                $regiones[] = new Region($id, $nombre);
+            }
+            $resultado->free();
+        }
+
+        return $regiones;
+    }
+
+    /**
+     * Elimina una region
+     * @param type $id
+     */
+    public static function deleteRegion($id) {
+        $query = 'DELETE FROM regiones WHERE id=' . $id;
+        self::new();
+        self::$conexion->query($query);
+        self::closeDB();
+
+        $query = 'UPDATE usuarios SET region=0 WHERE id=' . $id;
+        self::new();
+        self::$conexion->query($query);
+        self::closeDB();
+    }
+
+    /**
+     * Elimina un usuario
+     * @param type $id
+     */
+    public static function deleteUser($id) {
+        $query = 'DELETE FROM usuarios WHERE id=' . $id;
+        self::new();
+        self::$conexion->query($query);
         self::closeDB();
     }
 

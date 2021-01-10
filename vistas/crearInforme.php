@@ -2,7 +2,7 @@
 <html>
     <head>
         <meta charset="UTF-8">
-        <title>Iniciar sesión - inCOVID</title>
+        <title>Crear informe - inCOVID</title>
 
         <!-- Bootstrap -->
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css"
@@ -20,7 +20,7 @@
     </head>
     <body>
         <div class="container-fluid d-flex justify-content-center">
-            <div class="row principal">
+            <div class="row principal rounded">
 
                 <?php 
                 include '../recursos/cabecera.php'; 
@@ -83,6 +83,7 @@
                 <div class="col-12 d-flex justify-content-center mt-3">
                     <p><a href="../index.php">Volver</a></p>
                 </div>
+                <?php include '../recursos/footer.php'; ?>
             </div>
 
         </div>

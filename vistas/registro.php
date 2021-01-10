@@ -20,7 +20,7 @@
     </head>
     <body>
         <div class="container-fluid d-flex justify-content-center">
-            <div class="row principal">
+            <div class="row principal rounded">
 
                 <?php include '../recursos/cabecera.php'; ?>
 
@@ -50,8 +50,8 @@
                 <div class="col-12 mt-4 d-flex justify-content-center">
                     <p>¿Ya tienes cuenta? <a href="login.php">Inicia sesión</a></p>
                 </div>
+                <?php include '../recursos/footer.php'; ?>
             </div>
-
         </div>
     </body>
 </html>

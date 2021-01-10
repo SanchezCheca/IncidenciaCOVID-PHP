@@ -13,6 +13,7 @@ if (substr($dir, -9) == 'index.php') {
 //IMPORTA LAS CLASES NECESARIAS E INICIA LA SESIÓN
 require_once $ruta . 'modelo/Usuario.php';
 require_once $ruta . 'modelo/Informe.php';
+require_once $ruta . 'modelo/Region.php';
 
 session_start();
 
@@ -23,7 +24,7 @@ if (isset($_SESSION['usuarioIniciado'])) {
 ?>
 
 <!--Cabecera-->
-<nav class = "navbar navbar-expand navbar-light bg-light w-100">
+<nav class = "navbar navbar-expand navbar-light bg-white w-100 rounded-top">
     <a class = "navbar-brand" href = "<?php echo $ruta . 'index.php'; ?>">
         <img src = "<?php echo $ruta . 'images/logo.png'; ?>" width = "100" height = "auto" alt = "logo inCOVID">
     </a>
@@ -72,6 +73,7 @@ if (isset($_SESSION['usuarioIniciado'])) {
                         if ($usuarioIniciado->isAdmin()) {
                             ?>
                             <input type="submit" name="administrarUsuarios" class="dropdown-item" value="Administrar usuarios">
+                            <input type="submit" name="administrarRegiones" class="dropdown-item" value="Administrar regiones">
                             <?php
                         }
                         ?>
@@ -95,7 +97,7 @@ if (isset($_SESSION['usuarioIniciado'])) {
 //MUESTRA UN MENSAJE DE ALERTA/ERROR SI LO HUBIERA EN LA SESIÓN
 if (isset($_SESSION['mensaje'])) {
     ?>
-    <div class = "col-12 bg-warning">
+    <div class = "col-12 bg-warning d-flex justify-content-center">
         <?php echo $_SESSION['mensaje']; ?>
     </div>
     <?php

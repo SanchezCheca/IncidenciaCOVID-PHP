@@ -32,7 +32,7 @@
 
                 <!-- Título de la sección -->
                 <div class="col-12 mt-4 ml-4">
-                    <h4 class="h4">Panel de administrador: Usuarios</h4>
+                    <h4 class="h4">Panel de administrador: Regiones</h4>
                 </div>
 
                 <!-- Cuerpo -->
@@ -42,42 +42,23 @@
                             <tr>
                                 <th scope="col">ID</th>
                                 <th scope="col">Nombre</th>
-                                <th scope="col">Correo</th>
-                                <th scope="col">¿Admin?</th>
-                                <th scope="col">¿Autor?</th>
-                                <th scope="col">Activo</th>
-                                <th colspan="2">Acciones</th>
+                                <th colspan="2" scope="col">Acciones</th>
                             </tr>
                         </thead>
                         <tbody>
                             <?php
-                            if (isset($_SESSION['usuarios'])) {
-                                $usuarios = $_SESSION['usuarios'];
-                                foreach ($usuarios as $usuario) {
+                            if (isset($_SESSION['regiones'])) {
+                                $regiones = $_SESSION['regiones'];
+                                foreach ($regiones as $region) {
                                     ?>
                                     <tr>
-                                <form name="administracionUsuario" action="../controladores/controladorCRUD.php" method="POST">
-                                    <th scope="row"><?php echo $usuario->getId(); ?></th>
-                                    <input type="hidden" name="id" value="<?php echo $usuario->getId(); ?>">
-                                    <td><input class="form-control" type="text" name="nombre" value="<?php echo $usuario->getNombre(); ?>"></td>
-                                    <td><input class="form-control" type="email" name="correo" value="<?php echo $usuario->getCorreo(); ?>"></td>
-                                    <td><input type="checkbox" name="admin" value="1" <?php
-                                        if ($usuario->isAdmin()) {
-                                            echo 'checked';
-                                        };
-                                        ?>></td>
-                                    <td><input type="checkbox" name="autor" value="1" <?php
-                                        if ($usuario->isAutor()) {
-                                            echo 'checked';
-                                        };
-                                        ?>></td>
-                                    <td><input type="checkbox" name="activo" value="1" <?php
-                                        if ($usuario->getActivo() == 1) {
-                                            echo 'checked';
-                                        }
-                                        ?>></td>
-                                    <td><input type="submit" class="btn btn-success" name="actualizarUsuario" value="Guardar"></td>
-                                    <td><input type="submit" class="btn btn-danger" name="eliminarUsuario" value="Eliminar"></td>
+                                <form name="administracionRegion" action="../controladores/controladorCRUD.php" method="POST">
+                                    <th scope="row"><?php echo $region->getId(); ?></th>
+                                    <input type="hidden" name="id" value="<?php echo $region->getId(); ?>">
+                                    <td><input class="form-control" type="text" name="nombre" value="<?php echo $region->getNombre(); ?>"></td>
+                                    
+                                    <td><input type="submit" class="btn btn-success" name="actualizarRegion" value="Guardar"></td>
+                                    <td><input type="submit" class="btn btn-danger" name="eliminarRegion" value="Eliminar"></td>
                                 </form>
                                 </tr>
                                 <?php

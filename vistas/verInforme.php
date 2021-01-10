@@ -20,7 +20,7 @@
     </head>
     <body>
         <div class="container-fluid d-flex justify-content-center">
-            <div class="row principal">
+            <div class="row principal rounded">
 
                 <?php include '../recursos/cabecera.php'; ?>
 
@@ -133,6 +133,7 @@
                     <?php
                 }
                 ?>
+                <?php include '../recursos/footer.php'; ?>
             </div>
         </div>
     </body>
