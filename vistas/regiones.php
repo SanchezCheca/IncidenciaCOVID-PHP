@@ -22,26 +22,26 @@
         <div class="container-fluid d-flex justify-content-center">
             <div class="row principal rounded">
 
-                <?php 
+                <?php
                 include '../recursos/cabecera.php';
                 if (!(isset($usuarioIniciado) && $usuarioIniciado->isAdmin())) {
                     $_SESSION['mensaje'] = 'No tienes permiso para acceder a esta página';
                     header('Location: ../index.php');
                 }
                 ?>
-                
+
                 <!-- Título de la sección -->
                 <div class="col-12 mt-4 ml-4">
                     <h4 class="h4">Crear región</h4>
                 </div>
-                
+
                 <div class="col-12 mt-4 px-4 d-flex justify-content-center">
                     <form name="administracionRegion" action="../controladores/controladorCRUD.php" method="POST">
                         <div class="form-inline w-100">
                             <input type="text" name="nombre" placeholder="Nombre de la región" class="form-control">
                             <input type="submit" name="crearRegion" value="Crear región" class="btn btn-success">
                         </div>
-                        
+
                     </form>
                 </div>
 
@@ -65,13 +65,16 @@
                             if (isset($_SESSION['regiones'])) {
                                 $regiones = $_SESSION['regiones'];
                                 foreach ($regiones as $region) {
+                                    if ($region->getId() == 0) {
+                                        continue;
+                                    }
                                     ?>
                                     <tr>
                                 <form name="administracionRegion" action="../controladores/controladorCRUD.php" method="POST">
                                     <th scope="row"><?php echo $region->getId(); ?></th>
                                     <input type="hidden" name="id" value="<?php echo $region->getId(); ?>">
                                     <td><input class="form-control" type="text" name="nombre" value="<?php echo $region->getNombre(); ?>"></td>
-                                    
+
                                     <td><input type="submit" class="btn btn-success" name="actualizarRegion" value="Guardar"></td>
                                     <td><input type="submit" class="btn btn-danger" name="eliminarRegion" value="Eliminar"></td>
                                 </form>

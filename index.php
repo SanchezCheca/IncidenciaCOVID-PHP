@@ -2,7 +2,7 @@
 <html lang="es_ES">
     <head>
         <meta charset="UTF-8">
-        <title>Inicio - inCOVID</title>
+        <title>Inicio1 - inCOVID</title>
 
         <!-- Bootstrap -->
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css"
