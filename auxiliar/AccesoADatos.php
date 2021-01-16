@@ -528,7 +528,7 @@ class AccesoADatos {
         self::$conexion->query($query);
         self::closeDB();
 
-        $query = 'UPDATE usuarios SET region=0 WHERE id=' . $id;
+        $query = 'UPDATE informes SET region=0 WHERE region=' . $id;
         self::new();
         self::$conexion->query($query);
         self::closeDB();
